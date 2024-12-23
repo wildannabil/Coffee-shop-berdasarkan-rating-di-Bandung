@@ -1,52 +1,62 @@
 #include <iostream>
 #include <vector>
+#include <string>
 using namespace std;
 
-// Fungsi untuk menemukan rating tertinggi secara iteratif
-int FindHighestRatedCoffeeShopIteratif(const vector<int>& coffeeShops) {
-    int coffeeShopTertinggi = coffeeShops[0]; // Mulai dengan coffee shop pertama
+// Struct untuk menyimpan data coffee shop
+struct CoffeeShop {
+    string name;
+    int rating;
+};
+
+// Fungsi untuk menemukan coffee shop dengan rating tertinggi secara iteratif
+string FindHighestRatedCoffeeShopIteratif(const vector<CoffeeShop>& coffeeShops) {
+    CoffeeShop coffeeShopTertinggi = coffeeShops[0]; // Mulai dengan coffee shop pertama
 
     for (size_t k = 0; k < coffeeShops.size(); ++k) {
-        if (coffeeShops[k] > coffeeShopTertinggi) {
+        if (coffeeShops[k].rating > coffeeShopTertinggi.rating) {
             coffeeShopTertinggi = coffeeShops[k]; // Update jika rating lebih tinggi
         }
     }
 
-    return coffeeShopTertinggi; // Kembalikan rating tertinggi
+    return coffeeShopTertinggi.name; // Kembalikan nama coffee shop dengan rating tertinggi
 }
 
-// Fungsi untuk menemukan rating tertinggi secara rekursif
-int FindHighestRatedCoffeeShopRekursif(const vector<int>& coffeeShops, size_t index) {
+// Fungsi untuk menemukan coffee shop dengan rating tertinggi secara rekursif
+CoffeeShop FindHighestRatedCoffeeShopRekursif(const vector<CoffeeShop>& coffeeShops, size_t index) {
     // Basis rekursi: jika sudah di elemen terakhir
     if (index == coffeeShops.size() - 1) {
         return coffeeShops[index];
     }
 
-    // Ambil rating coffee shop saat ini
-    int coffeeShopSaatIni = coffeeShops[index];
-
     // Panggil rekursif untuk elemen berikutnya
-    int coffeeShopTertinggiDariSisa = FindHighestRatedCoffeeShopRekursif(coffeeShops, index + 1);
+    CoffeeShop coffeeShopTertinggiDariSisa = FindHighestRatedCoffeeShopRekursif(coffeeShops, index + 1);
 
     // Bandingkan rating saat ini dengan rating tertinggi dari sisa daftar
-    if (coffeeShopSaatIni > coffeeShopTertinggiDariSisa) {
-        return coffeeShopSaatIni;
+    if (coffeeShops[index].rating > coffeeShopTertinggiDariSisa.rating) {
+        return coffeeShops[index];
     } else {
         return coffeeShopTertinggiDariSisa;
     }
 }
 
 int main() {
-    // Daftar rating coffee shop
-    vector<int> coffeeShops = {75, 85, 90, 60, 95, 80};
+    // Daftar coffee shop di Bandung beserta ratingnya
+    vector<CoffeeShop> coffeeShops = {
+        {"Kopi Tuku", 85},
+        {"Kopi Kenangan", 90},
+        {"Janji Jiwa", 95},
+        {"Starbucks", 80},
+        {"Fore Coffee", 88}
+    };
 
-    // Mencari rating tertinggi secara iteratif
-    int highestIterative = FindHighestRatedCoffeeShopIteratif(coffeeShops);
-    cout << "Rating tertinggi (Iteratif): " << highestIterative << endl;
+    // Mencari coffee shop dengan rating tertinggi secara iteratif
+    string highestIterative = FindHighestRatedCoffeeShopIteratif(coffeeShops);
+    cout << "Coffee shop dengan rating tertinggi (Iteratif): " << highestIterative << endl;
 
-    // Mencari rating tertinggi secara rekursif
-    int highestRecursive = FindHighestRatedCoffeeShopRekursif(coffeeShops, 0);
-    cout << "Rating tertinggi (Rekursif): " << highestRecursive << endl;
+    // Mencari coffee shop dengan rating tertinggi secara rekursif
+    CoffeeShop highestRecursive = FindHighestRatedCoffeeShopRekursif(coffeeShops, 0);
+    cout << "Coffee shop dengan rating tertinggi (Rekursif): " << highestRecursive.name << endl;
 
     return 0;
 }
